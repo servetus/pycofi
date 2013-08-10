@@ -1,7 +1,7 @@
 pycofi
 ======
 
-An simple demonstration of collaborative filtering built for Maltlog.com. Maltlog.com is small site some friends and co-workers use to track their favorite craft beers. Collaborative Filtering is an algorithm commonly used for recommendations systems, Netflix being the most notable.
+An simple demonstration of collaborative filtering built for Maltlog.com. Maltlog.com is qvsmall site some friends and co-workers use to track their favorite craft beers. Collaborative Filtering is an algorithm commonly used for recommendations systems, Netflix being the most notable.
 
 Prerequisites
 -------------
@@ -27,7 +27,7 @@ There are three scripts in the maltlog_demo that demonstrate collaborative filte
 
     python top_recommendations.py
     
-'similar_beers.py' gives the 5 most similar beers in the learned feature space for each beer in the system. This has a few quirks right now. Many beers have too few data points their feature vector is very near the origin.
+'similar_beers.py' gives the 5 most similar beers in the learned feature space for each beer in the system. This has a few quirks right now. Many beers have too few data points so their feature vector is very near the origin.
 
     python similar_beers.py
 
