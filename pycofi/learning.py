@@ -72,7 +72,7 @@ def cost_grad(V, Y, R, num_users, num_features, num_items, lambda_val):
     return ndarray.flatten(asarray( V_grad.T ) )
 
     
-def learn_features(Y, R_train, R_cross, num_features, lambda_val, maxiter=1000):
+def learn_features(Y, R_train, num_features, lambda_val, R_cross=None, maxiter=1000):
     """
     Finds the optimal matrices X and Theta. 
 

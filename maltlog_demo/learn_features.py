@@ -9,7 +9,7 @@ lambda_val = 0.06
 
 (items, users, by_item, by_user) = get_maltlog_data()
 (Y, R, item_mean) = create_matrices(items, users, by_item, by_user)
-(X, Theta, J_train, J_cross) = learn_features(Y, R, None, num_features, lambda_val, 1500)
+(X, Theta, J_train, J_cross) = learn_features(Y, R, num_features, lambda_val, maxiter=1500)
 users = dict(users)
 
 print J_train
