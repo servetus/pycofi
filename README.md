@@ -1,7 +1,7 @@
 pycofi
 ======
 
-An simple demonstration of collaborative filtering built for Maltlog.com. Maltlog.com is qvsmall site some friends and co-workers use to track their favorite craft beers. Collaborative Filtering is an algorithm commonly used for recommendations systems, Netflix being the most notable.
+An simple demonstration of collaborative filtering built for Maltlog.com. Maltlog.com is a small site some friends and co-workers use to track their favorite craft beers. Collaborative Filtering is an algorithm commonly used for recommendations systems, Netflix being the most notable.
 
 Prerequisites
 -------------
