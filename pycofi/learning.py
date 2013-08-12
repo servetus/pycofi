@@ -1,8 +1,19 @@
-import requests
 from numpy import matrix, zeros, linalg, concatenate, where, multiply, subtract
 from numpy import sum, ndarray, dot, asarray
 from random import random
 from scipy import optimize
+
+def V_to_X_Theta(V, num_users, num_features, num_items):
+    V = matrix(V).reshape( (-1,1) )
+    n = (num_users * num_features)
+    X = V[0:n].reshape( (num_users, num_features) )
+    Theta = V[n:].reshape( (num_features, num_items) )
+
+    return (X,Theta)
+
+def X_Theta_to_V(X,Theta):
+    V = concatenate( ( X.reshape( -1, 1), Theta.reshape( -1, 1) ) )
+    return ndarray.flatten(asarray( V.T ) )
 
 def random_init(m):
     """initializes a numpy.matrix with small,random values"""
@@ -27,10 +38,7 @@ def cost(V, Y, R, num_users, num_features, num_items, lambda_val):
     :returns: scalar cost of V given Y and R
     """
 
-    V = matrix(V).reshape( (-1,1) )
-    n = (num_users * num_features)
-    X = V[0:n].reshape( (num_users, num_features) )
-    Theta = V[n:].reshape( (num_features, num_items) )
+    X,Theta = V_to_X_Theta(V, num_users, num_features, num_items)
 
     p = multiply(subtract(X * Theta, Y), R) 
 
@@ -54,11 +62,7 @@ def cost_grad(V, Y, R, num_users, num_features, num_items, lambda_val):
     :param lambda_val: the reglarization parameter
     :returns: the partial derivative of cost for each parameter of V at V
     """
-
-    V = matrix(V).reshape( (-1,1) )
-    n = (num_users * num_features)
-    X = V[0:n].reshape( (num_users, num_features) )
-    Theta = V[n:].reshape( (num_features, num_items) )
+    X,Theta = V_to_X_Theta(V, num_users, num_features, num_items)
 
     p = multiply(subtract(X * Theta, Y), R) 
 
@@ -68,8 +72,7 @@ def cost_grad(V, Y, R, num_users, num_features, num_items, lambda_val):
     Theta_grad = (p.T * X).T
     Theta_grad += Theta * lambda_val
 
-    V_grad = concatenate( ( X_grad.reshape( -1, 1), Theta_grad.reshape( -1, 1) ) )
-    return ndarray.flatten(asarray( V_grad.T ) )
+    return X_Theta_to_V(X_grad, Theta_grad)
 
     
 def learn_features(Y, R_train, num_features, lambda_val, R_cross=None, maxiter=1000):
@@ -93,17 +96,14 @@ def learn_features(Y, R_train, num_features, lambda_val, R_cross=None, maxiter=1
     random_init(X)
     random_init(Theta)
 
-    V = concatenate( ( X.reshape( -1, 1), Theta.reshape( -1, 1) ) ) 
-    V = ndarray.flatten(asarray( V.T ) )
+    V = X_Theta_to_V(X,Theta)
 
     f = lambda x: cost( x, Y, R_train, num_users, num_features, num_items, lambda_val)
+    fprime = lambda x: cost_grad( x, Y, R_train, num_users, num_features, num_items, lambda_val)
 
-    V_opt = optimize.fmin_bfgs(f, x0=V, maxiter=maxiter)
-    V_opt = matrix(V_opt).reshape( (-1,1) )
+    V_opt = optimize.fmin_bfgs(f, fprime=fprime, x0=V, maxiter=maxiter)
     
-    n = (num_users * num_features)
-    X = V_opt[0:n].reshape( (num_users, num_features) )
-    Theta = V_opt[n:].reshape( (num_features, num_items) )
+    X,Theta = V_to_X_Theta(V, num_users, num_features, num_items)
 
     J_train = cost( V_opt, Y, R_train, num_users, num_features, num_items, 0)
 
