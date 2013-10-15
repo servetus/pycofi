@@ -103,7 +103,7 @@ def learn_features(Y, R_train, num_features, lambda_val, R_cross=None, maxiter=1
 
     V_opt = optimize.fmin_bfgs(f, fprime=fprime, x0=V, maxiter=maxiter)
     
-    X,Theta = V_to_X_Theta(V, num_users, num_features, num_items)
+    X,Theta = V_to_X_Theta(V_opt, num_users, num_features, num_items)
 
     J_train = cost( V_opt, Y, R_train, num_users, num_features, num_items, 0)
 
